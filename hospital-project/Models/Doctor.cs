@@ -9,7 +9,6 @@ namespace hospital_project.Models
         public string Email { get; set; }
 
 
-        public int deneme { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; }
 
