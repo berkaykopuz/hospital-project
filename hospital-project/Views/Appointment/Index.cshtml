@@ -1,0 +1,73 @@
+﻿@page
+@model hospital_project.Models.Clinic
+@{
+    ViewData["Title"] = "Hastane Randevu Sistemi";
+}
+
+<div class="container">
+    <h1 class="mt-4">Hastane Randevu Sistemi</h1>
+
+    <div class="mt-4">
+        <label for="ilSelect" class="form-label">İl Seçimi</label>
+        <select asp-for="SecilenIl" class="form-select">
+            <option value="">Seçiniz</option>
+           @*  @foreach (var il in Model.Iller)
+            {
+                <option value="@il.Id">@il.Ad</option>
+            } *@
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <label for="klinikSelect" class="form-label">Klinik Seçimi</label>
+        <select asp-for="SecilenKlinik" class="form-select">
+            <option value="">Seçiniz</option>
+            @foreach (var klinik in Model.Clinic)
+            {
+                <option value="@klinik.Id">@klinik.Ad</option>
+            }
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <label for="hastaneSelect" class="form-label">Hastane Seçimi</label>
+        <select asp-for="SecilenHastane" class="form-select">
+            <option value="">Seçiniz</option>
+            @* @foreach (var hastane in Model.Hastaneler)
+            {
+                <option value="@hastane.Id">@hastane.Ad</option>
+            } *@
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <label for="doktorSelect" class="form-label">Doktor Seçimi</label>
+        <select asp-for="SecilenDoktor" class="form-select">
+            <option value="">Seçiniz</option>
+            @* @foreach (var doktor in Model.Doktorlar)
+            {
+                <option value="@doktor.Id">@doktor.Ad</option>
+            } *@
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <label for="randevuTarihi" class="form-label">Randevu Tarihi</label>
+        <input asp-for="SecilenTarih" type="date" class="form-control">
+    </div>
+
+    <div class="mt-4">
+        <label for="randevuSaati" class="form-label">Randevu Saati</label>
+        <select asp-for="SecilenSaat" class="form-select">
+            <option value="">Seçiniz</option>
+            @* @foreach (var saat in Model.Saatler)
+            {
+                <option value="@saat">@saat</option>
+            } *@
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <button id="randevuAlButton" class="btn btn-primary">Randevu Al</button>
+    </div>
+</div>
