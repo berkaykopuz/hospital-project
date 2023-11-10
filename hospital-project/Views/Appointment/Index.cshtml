@@ -1,1 +1,38 @@
 ﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Hastane Randevu Formu</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Hastane Randevu Formu</h2>
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <div class="form-group">
+                <label for="PatientName">Hasta Adı:</label>
+                <input type="text" class="form-control" id="PatientName" name="PatientName" required>
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber">Telefon Numarası:</label>
+                <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="AppointmentDate">Randevu Tarihi:</label>
+                <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate" required>
+            </div>
+            <div class="form-group">
+                <label for="AppointmentTime">Randevu Saati:</label>
+                <input type="time" class="form-control" id="AppointmentTime" name="AppointmentTime" required>
+            </div>
+            <div class="form-group">
+                <label for="DoctorName">Doktor:</label>
+                <input type="text" class="form-control" id="DoctorName" name="DoctorName" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Randevu Al</button>
+        </form>
+    </div>
+
+</body>
+</html>
