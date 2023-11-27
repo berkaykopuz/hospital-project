@@ -22,7 +22,7 @@ namespace hospital_project.Controllers
             Doctor doctor = await _doctorRepository.GetByIdAsync(id);
             return View(doctor);
         }
-
+        
         public IActionResult Create() {
             return View();
         }
