@@ -37,5 +37,23 @@ namespace hospital_project.Controllers
             _doctorRepository.Add(doctor);
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Doctor doctor = await _doctorRepository.GetByIdAsync(id);
+            return View(doctor);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Doctor doctor)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(doctor);
+            }
+            _doctorRepository.Update(doctor);
+            return RedirectToAction("Index");
+        }
+
     }
 }
