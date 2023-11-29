@@ -11,5 +11,6 @@ namespace hospital_project.Interfaces
         bool Update(Hospital hospital);
         bool Delete(Hospital hospital);
         bool Save();
+        public Hospital GetHospitalById(int hospitalId);
     }
 }

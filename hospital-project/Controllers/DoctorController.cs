@@ -30,9 +30,8 @@ namespace hospital_project.Controllers
         }
         
         public  IActionResult Create() {
-            var viewModel = new DoctorViewModel();
+            var viewModel = new DoctorViewModel(); 
 
-            // Veritabanından hastane listesini çekin
             viewModel.Hospitals = _hospitalRepository.GetAllHospitals();
 
             return View(viewModel);
@@ -48,9 +47,7 @@ namespace hospital_project.Controllers
                     Name = doctorVM.Name,
                     Email = doctorVM.Email,
                     Appointments = doctorVM.Appointments,
-                    Hospital = doctorVM.Hospitals.FirstOrDefault(h => h.Id == doctorVM.SelectedHospitalId)
-
-
+                    Hospital = _hospitalRepository.GetHospitalById(doctorVM.SelectedHospitalId)
                 };
 
                 _doctorRepository.Add(doctor);
