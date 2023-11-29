@@ -1,10 +1,4 @@
-﻿
-@model Doctor
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model hospital_project.ViewModels.DoctorViewModel
 
 <form method="post" asp-action="Create">
     <div class="form-group">
@@ -17,6 +11,10 @@
         <input asp-for="Email" class="form-control" placeholder="Email">
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    
+    <div class="form-group">
+        <label for="selectedHospital">Select a Hospital:</label>
+        @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
+    </div>
+
     <button type="submit" class="btn btn-primary">Oluştur</button>
 </form>

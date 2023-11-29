@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hospital_project.Data;
@@ -11,9 +12,11 @@ using hospital_project.Data;
 namespace hospital_project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231129171338_Init3")]
+    partial class Init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +83,7 @@ namespace hospital_project.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("HospitalId")
+                    b.Property<int?>("HospitalId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -172,13 +175,9 @@ namespace hospital_project.Migrations
 
             modelBuilder.Entity("hospital_project.Models.Doctor", b =>
                 {
-                    b.HasOne("hospital_project.Models.Hospital", "Hospital")
+                    b.HasOne("hospital_project.Models.Hospital", null)
                         .WithMany("Doctors")
-                        .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hospital");
+                        .HasForeignKey("HospitalId");
                 });
 
             modelBuilder.Entity("hospital_project.Models.HospitalClinic", b =>

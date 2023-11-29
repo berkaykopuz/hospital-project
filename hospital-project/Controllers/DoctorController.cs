@@ -1,15 +1,21 @@
 ﻿using hospital_project.Interfaces;
 using hospital_project.Models;
+using hospital_project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace hospital_project.Controllers
 {
     public class DoctorController : Controller
     {
         private readonly IDoctorRepository _doctorRepository;
-        public DoctorController(IDoctorRepository doctorRepository)
+        private readonly IHospitalRepository _hospitalRepository;
+
+        public DoctorController(IDoctorRepository doctorRepository,IHospitalRepository hospitalRepository)
         {
             _doctorRepository = doctorRepository;
+            _hospitalRepository = hospitalRepository;
         }
         public  async Task<IActionResult> Index()
         {
@@ -23,19 +29,35 @@ namespace hospital_project.Controllers
             return View(doctor);
         }
         
-        public IActionResult Create() {
-            return View();
+        public  IActionResult Create() {
+            var viewModel = new DoctorViewModel();
+
+            // Veritabanından hastane listesini çekin
+            viewModel.Hospitals = _hospitalRepository.GetAllHospitals();
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Doctor doctor)
+        public async Task<IActionResult> Create(DoctorViewModel doctorVM)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(doctor);
+                Doctor doctor = new Doctor
+                {
+                    Name = doctorVM.Name,
+                    Email = doctorVM.Email,
+                    Appointments = doctorVM.Appointments,
+                    Hospital = doctorVM.Hospitals.FirstOrDefault(h => h.Id == doctorVM.SelectedHospitalId)
+
+
+                };
+
+                _doctorRepository.Add(doctor);
+                return RedirectToAction("Index");
+
             }
-            _doctorRepository.Add(doctor);
-            return RedirectToAction("Index");
+            return View(doctorVM);
         }
 
         public async Task<IActionResult> Edit(int id)

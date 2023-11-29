@@ -8,7 +8,7 @@ namespace hospital_project.Models
         public string Name { get; set; }
 
 
-
-        public ICollection<HospitalClinic> HospitalClinics { get; set; }
+        public List<Doctor> Doctors { get; set; } = new List<Doctor>();
+        public ICollection<HospitalClinic> ?HospitalClinics { get; set; }
     }
 }

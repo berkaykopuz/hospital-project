@@ -16,8 +16,9 @@ namespace hospital_project.Models
         [Display(Name = "Mail Adresi")]
         public string Email { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public Hospital Hospital { get; set; }
 
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     }
 }
