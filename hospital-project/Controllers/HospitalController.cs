@@ -50,6 +50,11 @@ namespace hospital_project.Controllers
         {
             Hospital hospital = await _hospitalRepository.GetByIdAsync(id);
             return View(hospital);
+
+
+
+
+
         }
 
         [HttpPost]

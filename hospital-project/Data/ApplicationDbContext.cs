@@ -17,7 +17,7 @@ namespace hospital_project.Data
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<User> Users {  get; set; }
-
+        public DbSet<Contact> Contacts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

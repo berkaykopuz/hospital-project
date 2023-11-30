@@ -4,6 +4,8 @@ namespace hospital_project.Models
 {
     public class Contact
     {
+        public int id { get; set; }
+
         [Required(ErrorMessage = "Ad alanı zorunludur.")]
         public string Name { get; set; }
 
