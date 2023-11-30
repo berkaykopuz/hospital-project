@@ -1,4 +1,4 @@
-﻿@model Doctor
+﻿@model hospital_project.ViewModels.DoctorViewModel
 
 <form method="post" asp-action="Edit">
     <div class="form-group">
@@ -10,6 +10,10 @@
         <label asp-for="Email">Email</label>
         <input asp-for="Email" class="form-control" placeholder="Email" value="@Model.Email">
         <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="selectedHospital">Select a Hospital:</label>
+        @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
     </div>
 
     <button type="submit" class="btn btn-primary">Güncelle</button>

@@ -30,11 +30,11 @@ namespace hospital_project.Controllers
         }
         
         public  IActionResult Create() {
-            var viewModel = new DoctorViewModel(); 
+            var doctorVM = new DoctorViewModel(); 
 
-            viewModel.Hospitals = _hospitalRepository.GetAllHospitals();
+            doctorVM.Hospitals = _hospitalRepository.GetAllHospitals();
 
-            return View(viewModel);
+            return View(doctorVM);
         }
 
         [HttpPost]
@@ -60,18 +60,33 @@ namespace hospital_project.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             Doctor doctor = await _doctorRepository.GetByIdAsync(id);
-            return View(doctor);
+
+            DoctorViewModel doctorVM = new DoctorViewModel();
+            doctorVM.Name = doctor.Name;
+            doctorVM.Email = doctor.Email;
+            doctorVM.Hospitals = _hospitalRepository.GetAllHospitals();
+            
+            return View(doctorVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Doctor doctor)
+        public async Task<IActionResult> Edit(DoctorViewModel doctorVM)
         {
-            if (!ModelState.IsValid)
+            
+            if (ModelState.IsValid)
             {
-                return View(doctor);
+                Doctor doctor = _doctorRepository.GetDoctorById(doctorVM.Id);
+           
+                doctor.Name = doctorVM.Name;
+                doctor.Email = doctorVM.Email;
+                doctor.Hospital = _hospitalRepository.GetHospitalById(doctorVM.SelectedHospitalId);
+
+                _doctorRepository.Update(doctor);
+
+                return RedirectToAction("Index");
+                
             }
-            _doctorRepository.Update(doctor);
-            return RedirectToAction("Index");
+            return View(doctorVM);
         }
 
     }

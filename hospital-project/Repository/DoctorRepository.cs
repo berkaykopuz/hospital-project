@@ -45,5 +45,10 @@ namespace hospital_project.Repository
             _context.Update(doctor);
             return Save();
         }
+
+        public Doctor GetDoctorById(int doctorId)
+        {
+            return _context.Doctors.Find(doctorId);
+        }
     }
 }

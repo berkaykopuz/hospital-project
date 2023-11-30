@@ -9,5 +9,6 @@ namespace hospital_project.Interfaces
         bool Update(Doctor doctor);
         bool Delete(Doctor doctor);
         bool Save();
+        public Doctor GetDoctorById(int doctorId);
     }
 }
