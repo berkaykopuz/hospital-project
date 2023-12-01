@@ -15,6 +15,6 @@ namespace hospital_project.Models
 
         public Doctor Doctor { get; set; }
 
-        public User User { get; set; }
+        public Citizen Citizen { get; set; }
     }
 }

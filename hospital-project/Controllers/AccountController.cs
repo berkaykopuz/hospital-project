@@ -1,6 +1,8 @@
-﻿using hospital_project.Models;
+﻿using hospital_project.Data;
+using hospital_project.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace hospital_project.Controllers
 {
@@ -8,10 +10,10 @@ namespace hospital_project.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<Citizen> _userManager;
+        private readonly SignInManager<Citizen> _signInManager;
 
-        public AccountController(ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager, UserManager<Citizen> userManager, SignInManager<Citizen> signInManager)
         {
             _logger = logger;
             _roleManager = roleManager;
@@ -19,78 +21,95 @@ namespace hospital_project.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Login([FromQuery(Name = "ReturnUrl")] string ReturnUrl = "/")
+        [HttpGet]
+        public IActionResult Login()
         {
-            return View(new LoginModel()
-            {
-                ReturnUrl = ReturnUrl
-            });
+            var response = new LoginModel();
+            return View(response);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([FromForm] LoginModel model)
+        public async Task<IActionResult> Login(LoginModel loginViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(loginViewModel);
+
+            var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
+
+            if (user != null)
             {
-                IdentityUser user = await _userManager.FindByEmailAsync(model.Email);
-                if (user is not null)
+                //User is found, check password
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
+                if (passwordCheck)
                 {
-                    await _signInManager.SignOutAsync();
-                    if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, false)).Succeeded)
+                    //Password correct, sign in
+                    var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+                    if (result.Succeeded)
                     {
-                        bool isInRole = await _userManager.IsInRoleAsync(user, "");
-                        if (isInRole)
-                            return Redirect("/" + "Doctor");
-                        else
-                            return Redirect("/" + "Company");
+                        return RedirectToAction("Index");
                     }
                 }
-                ModelState.AddModelError("Error", "Invalid username or passwoord.");
+                //Password is incorrect
+                TempData["Error"] = "Wrong credentials. Please try again";
+                return View(loginViewModel);
             }
-            return View();
+            //User not found
+            TempData["Error"] = "Wrong credentials. Please try again";
+            return View(loginViewModel);
         }
 
-        public async Task<IActionResult> Logout([FromQuery(Name = "ReturnUrl")] string ReturnUrl = "/")
-        {
-            await _signInManager.SignOutAsync();
-            return Redirect(ReturnUrl);
-        }
-
+        [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var response = new RegisterDto();
+            return View(response);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([FromForm] RegisterDto model)
+        public async Task<IActionResult> Register(RegisterDto registerViewModel)
         {
-            var user = new IdentityUser
+            if (!ModelState.IsValid) return View(registerViewModel);
+
+            var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
+            if (user != null)
             {
-                UserName = model.Name,
-                Email = model.Email,
-            };
-            var result = await _userManager
-                .CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                var roleResult = await _userManager
-                    .AddToRoleAsync(user, "Customer");
-
-                if (roleResult.Succeeded)
-                    return RedirectToAction("Login", new { ReturnUrl = "/" });
-
+                TempData["Error"] = "This email address is already in use";
+                return View(registerViewModel);
             }
-            else
+
+            var newUser = new Citizen()
             {
-                foreach (var err in result.Errors)
+                Email = registerViewModel.Email,
+                UserName = registerViewModel.Name
+            };
+            
+            string[] roleNames = { "Admin", "User"}; //if role doesnt exist then create one
+            IdentityResult roleResult;
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
                 {
-                    ModelState.AddModelError("", err.Description);
+                    roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
-            return View();
+
+            var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password); //moved to roleName's below 
+            if (newUserResponse.Succeeded)
+                await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+
+            return RedirectToAction("Home/Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index");
+        }
+
+   
+
+
     }
 }
+

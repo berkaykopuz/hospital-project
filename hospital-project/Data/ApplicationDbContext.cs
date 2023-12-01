@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hospital_project.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<Citizen>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { 
         
@@ -17,15 +17,13 @@ namespace hospital_project.Data
         public DbSet<Doctor> Doctors  { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
-        public DbSet<User> Users {  get; set; }
         public DbSet<Contact> Contacts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
-
+ 
             modelBuilder.Entity<HospitalClinic>()
                     .HasKey(hc => new { hc.HospitalId, hc.ClinicId });
             modelBuilder.Entity<HospitalClinic>()
@@ -38,7 +36,8 @@ namespace hospital_project.Data
                     .HasForeignKey(c => c.ClinicId);
 
             
+            
         }
-
+        
     }
 }
