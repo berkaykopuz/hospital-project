@@ -1,9 +1,11 @@
 ﻿using hospital_project.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace hospital_project.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { 
         
@@ -12,7 +14,6 @@ namespace hospital_project.Data
 
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<HospitalClinic> HospitalClinics { get; set; }
-
         public DbSet<Doctor> Doctors  { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
@@ -22,6 +23,9 @@ namespace hospital_project.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<HospitalClinic>()
                     .HasKey(hc => new { hc.HospitalId, hc.ClinicId });
             modelBuilder.Entity<HospitalClinic>()
