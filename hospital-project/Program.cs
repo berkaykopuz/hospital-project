@@ -15,6 +15,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
+builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
+builder.Services.AddScoped<IHospitalClinicRepository, HospitalClinicRepository>();
 builder.Services.AddIdentity<Citizen, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddSession();

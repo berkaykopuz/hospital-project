@@ -55,7 +55,7 @@ namespace hospital_project.Repository
 
         public Hospital GetHospitalById(int hospitalId)
         {
-            // Doctor sınıfının bulunduğu DbSet'ten belirli bir ID'ye sahip doktoru getir
+           
             return _context.Hospitals.FirstOrDefault(h => h.Id == hospitalId);
         }
     }
