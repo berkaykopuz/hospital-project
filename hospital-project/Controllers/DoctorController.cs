@@ -1,12 +1,14 @@
 ﻿using hospital_project.Interfaces;
 using hospital_project.Models;
 using hospital_project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace hospital_project.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DoctorController : Controller
     {
         private readonly IDoctorRepository _doctorRepository;

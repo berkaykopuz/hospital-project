@@ -1,11 +1,13 @@
 ﻿using hospital_project.Data;
 using hospital_project.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 
 namespace hospital_project.Controllers
 {
+  
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
@@ -42,10 +44,11 @@ namespace hospital_project.Controllers
                 if (passwordCheck)
                 {
                     //Password correct, sign in
+                    TempData["username"] = user.UserName;
                     var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", "Home", new { area = "" });
                     }
                 }
                 //Password is incorrect

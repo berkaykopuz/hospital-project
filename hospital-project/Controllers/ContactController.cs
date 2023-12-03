@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Numerics;
 
+
 public class ContactController : Controller
 {
     private readonly IContactRepository _contactRepository;

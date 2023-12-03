@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using hospital_project.Data;
 using hospital_project.Models;
 using hospital_project.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hospital_project.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HospitalController : Controller
     {
         private readonly IHospitalRepository _hospitalRepository;

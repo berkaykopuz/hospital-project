@@ -15,6 +15,16 @@ namespace hospital_project.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                //send them to the AuthenticatedIndex page instead of the index page
+                return RedirectToAction("LoggedIn", "Home");
+            }
+            return View();
+        }
+
+        public IActionResult LoggedIn()
+        {
             return View();
         }
 
